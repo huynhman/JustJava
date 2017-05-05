@@ -3,6 +3,7 @@ package com.example.android.justjava;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.text.NumberFormat;
@@ -17,43 +18,53 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-
+    int quantity = 0;
+    double cost = 4.5;
     /**
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        String priceMessage = "Total = $" + calculatePrice(quantity, 4.99);
-        priceMessage = priceMessage + "\nThank you!";
-        displayMessage(priceMessage);
+        CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped);
+        boolean yesCream = whippedCreamCheckBox.isChecked();
+
+        CheckBox chocolateBox = (CheckBox) findViewById(R.id.chocolate);
+        boolean yesChocolate = chocolateBox.isChecked();
+
+        CheckBox cinammonBox = (CheckBox) findViewById(R.id.cinammon);
+        boolean yesCinammon = cinammonBox.isChecked();
+
+        double price = calculatePrice(quantity, cost);
+        displayMessage(displaySummary("Aiden Huynh", yesCream, yesChocolate, yesCinammon, quantity, price));
     }
 
-    /**
-     * Calculates the price of the order.
-     *
-     * @param quantity is the number of cups of coffee ordered
-     */
-    private int calculatePrice(int quantity) {
-        int price = quantity * 5;
-        return price;
-    }
     /**
      * Calculates the price of the order.
      *
      * @param quantity is the number of cups of coffee ordered
      */
     private double calculatePrice(int quantity, double cost) {
-        double price = quantity * cost;
-        return price;
+        return quantity * cost;
+
     }
+
     /**
-     * Calculates the price of the order.
-     *
+     * Displays summary order
+     *@param name
+     *@param quantity
+     *@param price
      *
      */
-    private int calculatePrice() {
-        int price = quantity * 5;
-        return price;
+
+    private String displaySummary(String name, boolean topping, boolean chocolate, boolean cinammon, int quantity, double price){
+        String summaryMessage = "Name: " + name
+                + "\nWhipped Cream? " + topping
+                + "\nChocolate? " + chocolate
+                + "\nCinammon? " + cinammon
+                + "\nQuantity: " + quantity
+                + "\nTotal: $" + price + "\nThank you!";
+        return summaryMessage;
     }
+
     /**
      * This method displays the given quantity value on the screen.
      */
@@ -62,16 +73,9 @@ public class MainActivity extends AppCompatActivity {
         quantityTextView.setText("" + number);
     }
 
-    /**
-     * This method displays the given price on the screen.
-     */
-    private void displayPrice(int number) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText(NumberFormat.getCurrencyInstance().format(number));
-    }
 
     /**This method is called when plus button is clicked: increases quantity by 1 */
-int quantity = 0;
+
 
     public void increment (View view) {
         quantity = quantity + 1;
@@ -88,8 +92,12 @@ int quantity = 0;
      * This method displays the given text on the screen.
      */
     private void displayMessage(String message) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
-        priceTextView.setText(message);
+        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(message);
     }
+
+
+
+
 
 }
